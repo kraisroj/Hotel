@@ -94,8 +94,8 @@
                 </constraints>
                 <properties>
                   <model>
-                    <item value="Si"/>
-                    <item value="No"/>
+                    <item value="si"/>
+                    <item value="no"/>
                   </model>
                 </properties>
               </component>
@@ -106,15 +106,6 @@
                 </constraints>
                 <properties>
                   <text value="Buscar Habitacion"/>
-                </properties>
-              </component>
-              <component id="4b1ce" class="javax.swing.JButton" binding="btnBuscarTodo">
-                <constraints>
-                  <grid row="3" column="4" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <forms/>
-                </constraints>
-                <properties>
-                  <text value="Buscar Todo"/>
                 </properties>
               </component>
             </children>

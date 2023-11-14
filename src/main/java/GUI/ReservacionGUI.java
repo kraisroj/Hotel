@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservacionGUI extends JFrame {
@@ -32,7 +33,6 @@ public class ReservacionGUI extends JFrame {
     private JButton btnBuscarTodo;
 
     public ReservacionGUI() {
-
 
         btnBuscarHabitacion.addActionListener(new ActionListener() {
             //BUSCAR POR FILTRO
@@ -57,14 +57,6 @@ public class ReservacionGUI extends JFrame {
             }
         });
 
-        btnBuscarTodo.addActionListener(new ActionListener() {
-            //BUSCAR SIN FILTRO
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resultadosTabla();
-            }
-        });
-
         tHabitacion.addMouseListener(new MouseAdapter() {
         });
     }
@@ -81,35 +73,43 @@ public class ReservacionGUI extends JFrame {
         return flag;
     }
 
-    private void contruirTitulosTabla(){
-        String titulos[]={"id", "No.Habitacion", "tamaño", "Cocina incluida", "estado"};
-    }
-
-    private void resultadosTabla(){
-        String titulos[]={"id", "No.Habitacion", "tamaño", "Cocina incluida", "estado"};
+    private void contruirTabla() {
+        String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
         String informacion[][]=obtenerMatriz();
         tHabitacion=new JTable(informacion, titulos);
     }
 
     private String[][] obtenerMatriz() {
-        List<Habitacion>listaHabitaciones=habiDao.busquedaTodoDisponible();
-        String matrizInfo[][] = new String[listaHabitaciones.size()][5];
-        for (int i = 0; i < listaHabitaciones.size(); i++){
-            matrizInfo[i][0]= String.valueOf(listaHabitaciones.get(i).getId())+"";
-            matrizInfo[i][1]= String.valueOf(listaHabitaciones.get(i).getNumHabitacion())+"";
-            matrizInfo[i][2]= String.valueOf(listaHabitaciones.get(i).getTamanio())+"";
-            matrizInfo[i][3]= String.valueOf(listaHabitaciones.get(i).isCocineta())+"";
-            matrizInfo[i][4]= String.valueOf(listaHabitaciones.get(i).isEstadoOcupado())+"";
+        ArrayList<Habitacion> miLista = habiDao.busquedaSinFiltro();
+        String matrizInfo[][] = new String[miLista.size()][5];
+        for (int i = 0; i < miLista.size(); i++){
+            matrizInfo[i][0]=miLista.get(i).getId()+"";
+            matrizInfo[i][1]=miLista.get(i).getNumHabitacion()+"";
+            matrizInfo[i][2]=miLista.get(i).getTamanio()+"";
+            matrizInfo[i][3]=miLista.get(i).getCocineta()+"";
+            matrizInfo[i][4]=miLista.get(i).getEstadoOcupado()+"";
         }
         return matrizInfo;
     }
 
-    public static void main(String[] args) {
+    private void inicializarComponentes(){
         ReservacionGUI gui = new ReservacionGUI();
         gui.setContentPane(gui.pnlMain);
         gui.setTitle("crear reservacion");
         gui.setVisible(true);
         gui.pack();
+        gui.contruirTabla();
+        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    public static void main(String[] args) {
+        //ReservacionGUI gui = new ReservacionGUI();
+        //gui.inicializarComponentes();
+        ReservacionGUI gui = new ReservacionGUI();
+        gui.setContentPane(gui.pnlMain);
+        gui.setTitle("crear reservacion");
+        gui.setVisible(true);
+        gui.pack();
+        gui.contruirTabla();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

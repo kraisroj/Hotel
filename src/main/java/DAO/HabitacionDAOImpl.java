@@ -47,7 +47,7 @@ public class HabitacionDAOImpl implements HabitacionDAO{
             pst = con.prepareStatement("""
                     SELECT *
                     FROM public.\"HABITACIONES\"
-                    WHERE estado_ocupado = ?;                  
+                    WHERE public.\"HABITACIONES\".\"estado_ocupado\" = ?;                  
                     """);
             pst.setString(1, "no");
             rs = pst.executeQuery();
@@ -67,6 +67,34 @@ public class HabitacionDAOImpl implements HabitacionDAO{
         return habitDisponibles;
     }
 
+    public ArrayList<Habitacion> busquedaSinFiltro(){
+        ArrayList miLista = new ArrayList();
+        Habitacion habit;
+        try {
+            ResultSet rs = null;
+            pst = con.prepareStatement("""
+                    SELECT *
+                    FROM public.\"HABITACIONES\"
+                    WHERE public.\"HABITACIONES\".\"estado_ocupado\" = ?;  
+                    """);
+            pst.setString(1, "false");
+            rs = pst.executeQuery();
+            while (rs.next()){
+                habit = new Habitacion();
+                habit.setId(Integer.parseInt(rs.getString("id_habitacion")));
+                habit.setNumHabitacion(Integer.parseInt(rs.getString("numero_habitacion")));
+                habit.setCocineta(rs.getString("cocineta"));
+                habit.setEstadoOcupado(rs.getString("estado_ocupado"));
+                miLista.add(habit);
+            }
+            rs.close();
+            pst.close();
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return miLista;
+    }
     protected void finalize() throws Throwable
     {
         try { con.close(); }

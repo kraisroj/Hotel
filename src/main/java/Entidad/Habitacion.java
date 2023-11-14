@@ -41,7 +41,7 @@ public class Habitacion {
         this.tamanio = tamanio;
     }
 
-    public String isCocineta() {
+    public String getCocineta() {
         return cocineta;
     }
 
@@ -49,7 +49,7 @@ public class Habitacion {
         this.cocineta = cocineta;
     }
 
-    public String isEstadoOcupado() {
+    public String getEstadoOcupado() {
         return estadoOcupado;
     }
 
