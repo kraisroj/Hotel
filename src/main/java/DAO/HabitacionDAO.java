@@ -1,9 +1,12 @@
 package DAO;
 
+import Entidad.Habitacion;
+
 import java.sql.ResultSet;
+import java.util.List;
 
 public interface HabitacionDAO {
-    ResultSet busquedaParametros(char tamanio, boolean cocineta, boolean estado);
-    ResultSet busquedaEstado(boolean estado);
+    ResultSet busquedaParametros(char tamanio, String cocineta, String estado);
+    List<Habitacion> busquedaTodoDisponible();
 
 }

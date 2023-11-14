@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class Conexion {
     private final String base = "CasoHotelera";
-    private final String user = "gerardo";
-    private final String pwd = "0705";
+    private final String user = "postgres";
+    private final String pwd = "sit2023";
     private final String url = "jdbc:postgresql://localhost:5433/" + base;
     private Connection con = null;
     public Connection getConexion(){
@@ -21,4 +21,5 @@ public class Conexion {
         }
         return con;
     }
+
 }

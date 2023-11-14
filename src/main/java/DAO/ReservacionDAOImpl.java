@@ -10,6 +10,8 @@ public class ReservacionDAOImpl implements ReservacionDAO{
     private Conexion conn = new Conexion();
     private Connection con = conn.getConexion();
     private PreparedStatement pst;
+
+
     @Override
     public ResultSet buscarPorHuesped(int idHuesped) {
         ResultSet rs;
@@ -21,6 +23,16 @@ public class ReservacionDAOImpl implements ReservacionDAO{
             pst.setInt(1, idHuesped);
             rs = pst.executeQuery();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            pst.close();
+            rs.close();
+            con.close();
+            finalize();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
         return rs;
@@ -46,7 +58,19 @@ public class ReservacionDAOImpl implements ReservacionDAO{
             pst.setTimestamp(3, fReserva);
             pst.setInt(4, dReserva);
             pst.setString(5, String.valueOf(metodoPago));
+            rs = pst.executeQuery();
+
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            pst.close();
+            rs.close();
+            con.close();
+            finalize();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
         return true;
@@ -60,6 +84,24 @@ public class ReservacionDAOImpl implements ReservacionDAO{
                     """);
         pst.setString(1, nombre);
         rs = pst.executeQuery();
+
+        try {
+            pst.close();
+            rs.close();
+            con.close();
+            finalize();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
         return rs.getInt("id_huesped");
+    }
+
+    protected void finalize() throws Throwable
+    {
+        try { con.close(); }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        super.finalize();
     }
 }
