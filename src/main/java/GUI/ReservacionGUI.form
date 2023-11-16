@@ -3,10 +3,10 @@
   <grid id="27dc6" binding="pnlMain" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="15" y="14" width="505" height="406"/>
+      <xy x="15" y="23" width="505" height="397"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="none" title="Crear reservacion"/>
     <children>
       <grid id="289de" binding="jBotonSur" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
         <constraints>
@@ -74,7 +74,7 @@
                   <model>
                     <item value="Pequeña"/>
                     <item value="Mediana"/>
-                    <item value="Familiar"/>
+                    <item value="Grande"/>
                   </model>
                 </properties>
               </component>
@@ -115,7 +115,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <scrollpane id="fd224">
+              <scrollpane id="fd224" binding="jspBarraTabla">
                 <constraints border-constraint="Center"/>
                 <properties/>
                 <border type="none"/>

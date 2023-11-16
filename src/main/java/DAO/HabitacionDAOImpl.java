@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HabitacionDAOImpl implements HabitacionDAO{
@@ -15,10 +16,11 @@ public class HabitacionDAOImpl implements HabitacionDAO{
     private Connection con = conn.getConexion();
     private PreparedStatement pst;
 
-
     @Override
-    public ResultSet busquedaParametros(char tamanio, String cocineta, String estado) {
+    public List<Habitacion> busquedaParametros(char tamanio, String cocineta) {
+        List<Habitacion> habitDisponibles = new ArrayList<>();
         String tama = String.valueOf(tamanio);
+        Habitacion habit;
         ResultSet rs;
         try {
             pst = con.prepareStatement("""
@@ -29,13 +31,21 @@ public class HabitacionDAOImpl implements HabitacionDAO{
                     """);
             pst.setString(1, tama);
             pst.setString(2, cocineta);
-            pst.setString(3, estado);
+            pst.setString(3, "no");
             rs = pst.executeQuery();
+            while (rs.next()){
+                habit = new Habitacion();
+                habit.setId(rs.getInt("id_habitacion"));
+                habit.setNumHabitacion(rs.getInt("numero_habitacion"));
+                habit.setTamanio(rs.getString("tamanio").charAt(1));
+                habit.setCocineta(rs.getString("cocineta"));
+                habit.setEstadoOcupado(rs.getString("estado_ocupado"));
+                habitDisponibles.add(habit);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return rs;
+        return habitDisponibles;
     }
 
     @Override
@@ -77,12 +87,13 @@ public class HabitacionDAOImpl implements HabitacionDAO{
                     FROM public.\"HABITACIONES\"
                     WHERE public.\"HABITACIONES\".\"estado_ocupado\" = ?;  
                     """);
-            pst.setString(1, "false");
+            pst.setString(1, "no");
             rs = pst.executeQuery();
             while (rs.next()){
                 habit = new Habitacion();
                 habit.setId(Integer.parseInt(rs.getString("id_habitacion")));
                 habit.setNumHabitacion(Integer.parseInt(rs.getString("numero_habitacion")));
+                habit.setTamanio(rs.getString("tamanio").charAt(0));
                 habit.setCocineta(rs.getString("cocineta"));
                 habit.setEstadoOcupado(rs.getString("estado_ocupado"));
                 miLista.add(habit);
@@ -95,12 +106,12 @@ public class HabitacionDAOImpl implements HabitacionDAO{
         }
         return miLista;
     }
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         try { con.close(); }
         catch (SQLException e) {
             e.printStackTrace();
         }
         super.finalize();
     }
+
 }

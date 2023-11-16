@@ -1,12 +1,15 @@
 package DAO;
 
+import Entidad.Reservacion;
+
+import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.util.List;
 
 public interface ReservacionDAO {
     ResultSet buscarPorHuesped(int idHuesped);
-    ResultSet buscarPorFecha(Timestamp fecha);
+    List<Reservacion> buscarPorFecha(Date fecha);
 
     boolean crearReservacion(int idHabitacion, int idHuesped,
-                             Timestamp fReserva, int dReserva, char metodoPago);
+                             Date fReserva, int dReserva, char metodoPago);
 }
