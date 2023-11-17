@@ -14,10 +14,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class ReservacionGUI extends JFrame {
-    private ResultSet rs;
-    private TableModel model;
     private HabitacionDAOImpl habiDao = new HabitacionDAOImpl();
-
     ////
     private JPanel jBotonSur;
     private JPanel pnlCenterMain;
@@ -29,7 +26,7 @@ public class ReservacionGUI extends JFrame {
     private JComboBox cbTamanio;
     private JComboBox cbCocineta;
     private JTextField txtNombreHuesped;
-    private JTable tHabitacion;
+    private JTable tHabitacion = new JTable(informacion(), titulosTabla());
     private JButton btnBuscarHabitacion;
     private JScrollPane jspBarraTabla;
     private JButton btnBuscarTodo;
@@ -59,7 +56,7 @@ public class ReservacionGUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int row = tHabitacion.getSelectedRow();
-                System.out.println(model.getValueAt(row, 0).toString());
+                System.out.println(tHabitacion.getValueAt(row, 0).toString());
             }
         });
     }
@@ -76,18 +73,21 @@ public class ReservacionGUI extends JFrame {
     private void construirTablaFiltros(char tam, String cocineta){
         String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
         String informacion[][]=obtenerMatrizFiltro(tam, cocineta);
-        tHabitacion = new JTable(informacion, titulos);
-
-        model = tHabitacion.getModel();
-        jspBarraTabla.setViewportView(tHabitacion);
+        //tHabitacion = new JTable(informacion, titulos);
+        JTable dummyT = new JTable(informacion, titulos);
+        this.tHabitacion.setModel(dummyT.getModel());
+        //model = tHabitacion.getModel();
+        jspBarraTabla.setViewportView(this.tHabitacion);
     }
 
     private void construirTablaSinFiltro() {
         String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
         String informacion[][]=obtenerMatrizSinFiltro();
-        tHabitacion = new JTable(informacion, titulos);
-        model = tHabitacion.getModel();
-        jspBarraTabla.setViewportView(tHabitacion);
+        //tHabitacion = new JTable(informacion, titulos);
+        JTable dummyT = new JTable(informacion, titulos);
+        this.tHabitacion.setModel(dummyT.getModel());
+        //model = tHabitacion.getModel();
+        jspBarraTabla.setViewportView(this.tHabitacion);
     }
 
     private String[] titulosTabla(){
@@ -132,6 +132,7 @@ public class ReservacionGUI extends JFrame {
         this.setVisible(true);
         this.pack();
         //this.construirTablaSinFiltro();
+        jspBarraTabla.setViewportView(this.tHabitacion);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
     }
