@@ -52,6 +52,8 @@
             <colspec value="fill:102px:noGrow"/>
             <colspec value="left:4dlu:noGrow"/>
             <colspec value="fill:152px:noGrow"/>
+            <colspec value="left:4dlu:noGrow"/>
+            <colspec value="fill:max(d;4px):noGrow"/>
             <constraints border-constraint="North"/>
             <properties/>
             <border type="none"/>
@@ -94,8 +96,8 @@
                 </constraints>
                 <properties>
                   <model>
-                    <item value="si"/>
-                    <item value="no"/>
+                    <item value="Si"/>
+                    <item value="No"/>
                   </model>
                 </properties>
               </component>
@@ -106,6 +108,15 @@
                 </constraints>
                 <properties>
                   <text value="Buscar Habitacion"/>
+                </properties>
+              </component>
+              <component id="990d4" class="javax.swing.JButton" binding="btnBuscarTodo">
+                <constraints>
+                  <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Buscar sin filtros"/>
                 </properties>
               </component>
             </children>

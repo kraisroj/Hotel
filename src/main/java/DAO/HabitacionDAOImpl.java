@@ -37,7 +37,7 @@ public class HabitacionDAOImpl implements HabitacionDAO{
                 habit = new Habitacion();
                 habit.setId(rs.getInt("id_habitacion"));
                 habit.setNumHabitacion(rs.getInt("numero_habitacion"));
-                habit.setTamanio(rs.getString("tamanio").charAt(1));
+                habit.setTamanio(rs.getString("tamanio").charAt(0));
                 habit.setCocineta(rs.getString("cocineta"));
                 habit.setEstadoOcupado(rs.getString("estado_ocupado"));
                 habitDisponibles.add(habit);
@@ -98,20 +98,10 @@ public class HabitacionDAOImpl implements HabitacionDAO{
                 habit.setEstadoOcupado(rs.getString("estado_ocupado"));
                 miLista.add(habit);
             }
-            rs.close();
-            pst.close();
-            con.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return miLista;
-    }
-    protected void finalize() throws Throwable {
-        try { con.close(); }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        super.finalize();
     }
 
 }
