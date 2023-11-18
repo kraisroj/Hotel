@@ -107,8 +107,9 @@ public class ReservacionDAOImpl implements ReservacionDAO {
             pst.setInt(4, dReserva);
             pst.setString(5, String.valueOf(metodoPago));
             rs = pst.executeQuery();
-            if (rs.rowInserted())
+            if (rs.rowInserted()){
                 return true;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (Throwable e) {

@@ -21,10 +21,11 @@ public class ReservacionGUI extends JFrame {
     private HabitacionDAOImpl habiDao = new HabitacionDAOImpl();
     private HuespedDAOImpl huesDAO = new HuespedDAOImpl();
 
-    private LocalDate fechaNow = LocalDate.now();
+    private String tam = "";
 
     private Long l = System.currentTimeMillis();
     private Date d = new Date(l);
+
     ////
     private JPanel jBotonSur;
     private JPanel pnlCenterMain;
@@ -48,7 +49,7 @@ public class ReservacionGUI extends JFrame {
             //BUSCAR POR FILTRO
             @Override
             public void actionPerformed(ActionEvent e) {
-                String tam = cbTamanio.getSelectedItem().toString();
+                tam = cbTamanio.getSelectedItem().toString();
                 construirTablaFiltros(tam.charAt(0), cocinetaOpcion(cbCocineta.getSelectedItem().toString()));
             }
         });
@@ -76,10 +77,15 @@ public class ReservacionGUI extends JFrame {
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 2).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 3).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 4).toString());
-                reserDAO.crearReservacion(idHabit,
+                if (reserDAO.crearReservacion(idHabit,
                         huesDAO.obtenerIdHuesped("Gerardo Rojas"),
-                        new java.sql.Date(d.getDate())
-                        ,2, "D".charAt(0));
+                        new java.sql.Date(d.getTime())
+                        ,2, "D".charAt(0))==true){
+                    habiDao.ocuparHabitacion(idHabit);
+                    construirTablaFiltros(tam.charAt(0), cocinetaOpcion(cbCocineta.getSelectedItem().toString()));
+                }else{
+                    JOptionPane.showMessageDialog(null, "ERROR", "ERROR DE RESERVACION", JOptionPane.INFORMATION_MESSAGE);
+                }
                 //habiDao.ocuparHabitacion();
                 //System.out.println(huesDAO.obtenerIdHuesped("Gerardo Rojas"));
 

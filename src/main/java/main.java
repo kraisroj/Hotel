@@ -30,5 +30,6 @@ public class main {
 
         Date d = new Date(l);
         System.out.println(d.toLocalDate());
+        System.out.println(new java.sql.Date(d.getTime()));
     }
 }
