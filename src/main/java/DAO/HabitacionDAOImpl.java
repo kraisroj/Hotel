@@ -77,6 +77,7 @@ public class HabitacionDAOImpl implements HabitacionDAO{
         return habitDisponibles;
     }
 
+    @Override
     public ArrayList<Habitacion> busquedaSinFiltro(){
         ArrayList miLista = new ArrayList();
         Habitacion habit;
@@ -104,4 +105,19 @@ public class HabitacionDAOImpl implements HabitacionDAO{
         return miLista;
     }
 
+    @Override
+    public void ocuparHabitacion(int idHabitacion){
+        ResultSet rs;
+        try {
+            pst = con.prepareStatement("""
+                    UPDATE public."HABITACIONES"
+                    	SET estado_ocupado= 'si'
+                    	WHERE public."HABITACIONES".id_habitacion = ?;
+                    """);
+            pst.setInt(1, idHabitacion);
+            rs = pst.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

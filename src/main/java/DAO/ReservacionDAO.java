@@ -12,4 +12,6 @@ public interface ReservacionDAO {
 
     boolean crearReservacion(int idHabitacion, int idHuesped,
                              Date fReserva, int dReserva, char metodoPago);
+
+    List<Reservacion> buscarTodoFecha();
 }

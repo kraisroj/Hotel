@@ -1,20 +1,30 @@
 package GUI;
 
 import DAO.HabitacionDAOImpl;
+import DAO.HuespedDAOImpl;
+import DAO.ReservacionDAOImpl;
 import Entidad.Habitacion;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.ResultSet;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
+
 public class ReservacionGUI extends JFrame {
+    private ReservacionDAOImpl reserDAO = new ReservacionDAOImpl();
     private HabitacionDAOImpl habiDao = new HabitacionDAOImpl();
+    private HuespedDAOImpl huesDAO = new HuespedDAOImpl();
+
+    private LocalDate fechaNow = LocalDate.now();
+
+    private Long l = System.currentTimeMillis();
+    private Date d = new Date(l);
     ////
     private JPanel jBotonSur;
     private JPanel pnlCenterMain;
@@ -25,11 +35,11 @@ public class ReservacionGUI extends JFrame {
     private JButton btnSalir;
     private JComboBox cbTamanio;
     private JComboBox cbCocineta;
-    private JTextField txtNombreHuesped;
     private JTable tHabitacion = new JTable(informacion(), titulosTabla());
     private JButton btnBuscarHabitacion;
     private JScrollPane jspBarraTabla;
     private JButton btnBuscarTodo;
+    private JTextField txtUsuario;
     private JTextField txtIdHabitacion;
 
     public ReservacionGUI() {
@@ -43,7 +53,6 @@ public class ReservacionGUI extends JFrame {
             }
         });
 
-
         btnBuscarTodo.addActionListener(new ActionListener() {
             //BUSCAR SIN FILTROS APLICADOS
             @Override
@@ -55,24 +64,41 @@ public class ReservacionGUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int row = tHabitacion.getSelectedRow();
-                System.out.println(tHabitacion.getValueAt(row, 0).toString());
+                int rowIdHabit = tHabitacion.getSelectedRow();
+                int idHabit = Integer.valueOf(tHabitacion.getValueAt(rowIdHabit, 0).toString());
+                int noHabit = Integer.valueOf(tHabitacion.getValueAt(rowIdHabit, 1).toString());
+                char tama = tHabitacion.getValueAt(rowIdHabit, 2).toString().charAt(0);
+                String cocina = tHabitacion.getValueAt(rowIdHabit, 3).toString();
+
+
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 0).toString());
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 1).toString());
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 2).toString());
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 3).toString());
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 4).toString());
+                reserDAO.crearReservacion(idHabit,
+                        huesDAO.obtenerIdHuesped("Gerardo Rojas"),
+                        new java.sql.Date(d.getDate())
+                        ,2, "D".charAt(0));
+                //habiDao.ocuparHabitacion();
+                //System.out.println(huesDAO.obtenerIdHuesped("Gerardo Rojas"));
+
             }
         });
     }
 
-    private String cocinetaOpcion(String opcion){
+    private String cocinetaOpcion(String opcion) {
         String flag = "";
-        if (opcion.equals("Si")){
+        if (opcion.equals("Si")) {
             return flag = "incluida";
-        }else{
+        } else {
             return flag = "no incluida";
         }
     }
 
-    private void construirTablaFiltros(char tam, String cocineta){
-        String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
-        String informacion[][]=obtenerMatrizFiltro(tam, cocineta);
+    private void construirTablaFiltros(char tam, String cocineta) {
+        String titulos[] = {"id habitación", "No. habitación", "tamaño", "cocineta incluida", "ocupado"};
+        String informacion[][] = obtenerMatrizFiltro(tam, cocineta);
         //tHabitacion = new JTable(informacion, titulos);
         JTable dummyT = new JTable(informacion, titulos);
         this.tHabitacion.setModel(dummyT.getModel());
@@ -81,8 +107,8 @@ public class ReservacionGUI extends JFrame {
     }
 
     private void construirTablaSinFiltro() {
-        String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
-        String informacion[][]=obtenerMatrizSinFiltro();
+        String titulos[] = {"id habitación", "No. habitación", "tamaño", "cocineta incluida", "ocupado"};
+        String informacion[][] = obtenerMatrizSinFiltro();
         //tHabitacion = new JTable(informacion, titulos);
         JTable dummyT = new JTable(informacion, titulos);
         this.tHabitacion.setModel(dummyT.getModel());
@@ -90,25 +116,25 @@ public class ReservacionGUI extends JFrame {
         jspBarraTabla.setViewportView(this.tHabitacion);
     }
 
-    private String[] titulosTabla(){
-        String titulos[]={"id habitación","No. habitación","tamaño","cocineta incluida", "ocupado"};
+    private String[] titulosTabla() {
+        String titulos[] = {"id habitación", "No. habitación", "tamaño", "cocineta incluida", "ocupado"};
         return titulos;
     }
 
-    private String[][] informacion(){
-        String informacion[][]=obtenerMatrizSinFiltro();
+    private String[][] informacion() {
+        String informacion[][] = obtenerMatrizSinFiltro();
         return informacion;
     }
 
     private String[][] obtenerMatrizSinFiltro() {
         ArrayList<Habitacion> miLista = habiDao.busquedaSinFiltro();
         String matrizInfo[][] = new String[miLista.size()][5];
-        for (int i = 0; i < miLista.size(); i++){
-            matrizInfo[i][0]=miLista.get(i).getId()+"";
-            matrizInfo[i][1]=miLista.get(i).getNumHabitacion()+"";
-            matrizInfo[i][2]=miLista.get(i).getTamanio()+"";
-            matrizInfo[i][3]=miLista.get(i).getCocineta()+"";
-            matrizInfo[i][4]=miLista.get(i).getEstadoOcupado()+"";
+        for (int i = 0; i < miLista.size(); i++) {
+            matrizInfo[i][0] = miLista.get(i).getId() + "";
+            matrizInfo[i][1] = miLista.get(i).getNumHabitacion() + "";
+            matrizInfo[i][2] = miLista.get(i).getTamanio() + "";
+            matrizInfo[i][3] = miLista.get(i).getCocineta() + "";
+            matrizInfo[i][4] = miLista.get(i).getEstadoOcupado() + "";
         }
         return matrizInfo;
     }
@@ -116,17 +142,17 @@ public class ReservacionGUI extends JFrame {
     private String[][] obtenerMatrizFiltro(char tam, String cocineta) {
         ArrayList<Habitacion> miLista = (ArrayList<Habitacion>) habiDao.busquedaParametros(tam, cocineta);
         String matrizInfo[][] = new String[miLista.size()][5];
-        for (int i = 0; i < miLista.size(); i++){
-            matrizInfo[i][0]=miLista.get(i).getId()+"";
-            matrizInfo[i][1]=miLista.get(i).getNumHabitacion()+"";
-            matrizInfo[i][2]=miLista.get(i).getTamanio()+"";
-            matrizInfo[i][3]=miLista.get(i).getCocineta()+"";
-            matrizInfo[i][4]=miLista.get(i).getEstadoOcupado()+"";
+        for (int i = 0; i < miLista.size(); i++) {
+            matrizInfo[i][0] = miLista.get(i).getId() + "";
+            matrizInfo[i][1] = miLista.get(i).getNumHabitacion() + "";
+            matrizInfo[i][2] = miLista.get(i).getTamanio() + "";
+            matrizInfo[i][3] = miLista.get(i).getCocineta() + "";
+            matrizInfo[i][4] = miLista.get(i).getEstadoOcupado() + "";
         }
         return matrizInfo;
     }
 
-    private void inicializarComponentes(){
+    private void inicializarComponentes() {
         this.setContentPane(pnlMain);
         this.setTitle("crear reservacion");
         this.setVisible(true);
@@ -135,6 +161,10 @@ public class ReservacionGUI extends JFrame {
         jspBarraTabla.setViewportView(this.tHabitacion);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+    }
+
+    public void setTxtUsuario(String user) {
+        this.txtUsuario.setText(user);
     }
 
     public static void main(String[] args) {

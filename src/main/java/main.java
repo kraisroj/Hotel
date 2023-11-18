@@ -2,8 +2,11 @@ import DAO.HabitacionDAOImpl;
 import DAO.ReservacionDAOImpl;
 import GUI.ReservacionGUI;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
 
 public class main {
     public static void main(String[] args) {
@@ -21,6 +24,11 @@ public class main {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }*/
-        ReservacionGUI gui = new ReservacionGUI();
+        //ReservacionGUI gui = new ReservacionGUI();
+
+        Long l = System.currentTimeMillis();
+
+        Date d = new Date(l);
+        System.out.println(d.toLocalDate());
     }
 }
