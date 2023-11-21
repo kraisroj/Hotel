@@ -4,8 +4,8 @@ import java.sql.Date;
 
 public class Reservacion {
     private Integer idReservacion;//id_reservacion
-    private Integer idHabitacion;//id_habitacion
-    private Integer idHuesped;//id_huesped
+    private Integer numHabitacion; //numero_habitacion
+    private String nombreHuesped; //nombre - de tabla HUESPEDES
     private Date fechaReserva;//fecha_reservacion
     private Integer diasReserva;//dias_reservacion
     private String metodoPago;//metodo_pago
@@ -13,10 +13,11 @@ public class Reservacion {
     public Reservacion() {
     }
 
-    public Reservacion(Integer idReservacion, Integer idHabitacion, Integer idHuesped, Date fechaReserva, Integer diasReserva, String metodoPago) {
+    public Reservacion(Integer idReservacion, Integer numHabitacion, String nombreHuesped, Date fechaReserva,
+                       Integer diasReserva, String metodoPago){
         this.idReservacion = idReservacion;
-        this.idHabitacion = idHabitacion;
-        this.idHuesped = idHuesped;
+        this.numHabitacion = numHabitacion;
+        this.nombreHuesped = nombreHuesped;
         this.fechaReserva = fechaReserva;
         this.diasReserva = diasReserva;
         this.metodoPago = metodoPago;
@@ -30,20 +31,20 @@ public class Reservacion {
         this.idReservacion = idReservacion;
     }
 
-    public Integer getIdHabitacion() {
-        return idHabitacion;
+    public Integer getNumHabitacion() {
+        return numHabitacion;
     }
 
-    public void setIdHabitacion(Integer idHabitacion) {
-        this.idHabitacion = idHabitacion;
+    public void setNumHabitacion(Integer numHabitacion) {
+        this.numHabitacion = numHabitacion;
     }
 
-    public Integer getIdHuesped() {
-        return idHuesped;
+    public String getNombreHuesped() {
+        return nombreHuesped;
     }
 
-    public void setIdHuesped(Integer idHuesped) {
-        this.idHuesped = idHuesped;
+    public void setNombreHuesped(String nombreHuesped) {
+        this.nombreHuesped = nombreHuesped;
     }
 
     public Date getFechaReserva() {

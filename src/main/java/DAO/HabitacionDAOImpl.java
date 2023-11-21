@@ -107,7 +107,6 @@ public class HabitacionDAOImpl implements HabitacionDAO{
 
     @Override
     public void ocuparHabitacion(int idHabitacion){
-        ResultSet rs;
         try {
             pst = con.prepareStatement("""
                     UPDATE public."HABITACIONES"
@@ -115,7 +114,7 @@ public class HabitacionDAOImpl implements HabitacionDAO{
                     	WHERE public."HABITACIONES".id_habitacion = ?;
                     """);
             pst.setInt(1, idHabitacion);
-            rs = pst.executeQuery();
+            int afecctado = pst.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -40,6 +38,7 @@ public class ReservacionGUI extends JFrame {
     private JButton btnBuscarHabitacion;
     private JScrollPane jspBarraTabla;
     private JButton btnBuscarTodo;
+    private JComboBox cbDias;
     private JTextField txtUsuario;
     private JTextField txtIdHabitacion;
 
@@ -55,7 +54,7 @@ public class ReservacionGUI extends JFrame {
         });
 
         btnBuscarTodo.addActionListener(new ActionListener() {
-            //BUSCAR SIN FILTROS APLICADOS
+            //MOSTRAR TODAS LAS HABITACIONES
             @Override
             public void actionPerformed(ActionEvent e) {
                 construirTablaSinFiltro();
@@ -77,15 +76,31 @@ public class ReservacionGUI extends JFrame {
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 2).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 3).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 4).toString());
-                if (reserDAO.crearReservacion(idHabit,
-                        huesDAO.obtenerIdHuesped("Gerardo Rojas"),
-                        new java.sql.Date(d.getTime())
-                        ,2, "D".charAt(0))==true){
-                    habiDao.ocuparHabitacion(idHabit);
-                    construirTablaFiltros(tam.charAt(0), cocinetaOpcion(cbCocineta.getSelectedItem().toString()));
-                }else{
-                    JOptionPane.showMessageDialog(null, "ERROR", "ERROR DE RESERVACION", JOptionPane.INFORMATION_MESSAGE);
+                String[] tarjetas = {"Crédito", "Débito"};
+
+                switch (JOptionPane.showOptionDialog(
+                        null, "Tarjetas de pago", "Metodo de pago",
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                        null, tarjetas, 0)
+                )
+                {
+                    case 0:
+                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped("Gerardo Rojas"),
+                                new java.sql.Date(d.getTime()), Integer.parseInt(cbDias.getSelectedItem().toString()),
+                                "C".charAt(0));
+                            habiDao.ocuparHabitacion(idHabit);
+                        break;
+                    case 1:
+                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped("Gerardo Rojas"),
+                                new java.sql.Date(d.getTime()), Integer.parseInt(cbDias.getSelectedItem().toString())
+                                , "D".charAt(0));
+                        habiDao.ocuparHabitacion(idHabit);
+                        break;
+                    case 2:
+                        break;
                 }
+                construirTablaSinFiltro();
+//              JOptionPane.showMessageDialog(null, "ERROR", "ERROR DE RESERVACION", JOptionPane.INFORMATION_MESSAGE);
                 //habiDao.ocuparHabitacion();
                 //System.out.println(huesDAO.obtenerIdHuesped("Gerardo Rojas"));
 
@@ -105,20 +120,17 @@ public class ReservacionGUI extends JFrame {
     private void construirTablaFiltros(char tam, String cocineta) {
         String titulos[] = {"id habitación", "No. habitación", "tamaño", "cocineta incluida", "ocupado"};
         String informacion[][] = obtenerMatrizFiltro(tam, cocineta);
-        //tHabitacion = new JTable(informacion, titulos);
         JTable dummyT = new JTable(informacion, titulos);
         this.tHabitacion.setModel(dummyT.getModel());
-        //model = tHabitacion.getModel();
         jspBarraTabla.setViewportView(this.tHabitacion);
     }
 
     private void construirTablaSinFiltro() {
         String titulos[] = {"id habitación", "No. habitación", "tamaño", "cocineta incluida", "ocupado"};
         String informacion[][] = obtenerMatrizSinFiltro();
-        //tHabitacion = new JTable(informacion, titulos);
         JTable dummyT = new JTable(informacion, titulos);
         this.tHabitacion.setModel(dummyT.getModel());
-        //model = tHabitacion.getModel();
+
         jspBarraTabla.setViewportView(this.tHabitacion);
     }
 

@@ -8,6 +8,8 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +24,7 @@ public class HistorialReservaciones extends JFrame{
     private JScrollPane jspBarraTabla;
     private JButton btnBuscarNombre;
     private JTextField txtNombreHuesped;
+    private JButton btnTodosFecha;
 
     Calendar cld = Calendar.getInstance();
     JDateChooser dateChos = new JDateChooser(cld.getTime());
@@ -32,7 +35,6 @@ public class HistorialReservaciones extends JFrame{
         construirTablaTodo();
         pack();
 
-
         //calendario
         dateChos.setDateFormatString("dd/MM/yyyy");
         jpCalen.add(dateChos);
@@ -41,7 +43,22 @@ public class HistorialReservaciones extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 construirTablaFiltroFecha(new java.sql.Date(getDate().getTime()));
+            }
+        });
 
+
+        tReservaciones.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+            }
+        });
+        btnTodosFecha.addActionListener(new ActionListener() {
+            //MOSTRAR TODAS LAS RESERVACIONES
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                construirTablaTodo();
             }
         });
     }
@@ -50,19 +67,19 @@ public class HistorialReservaciones extends JFrame{
     }
 
     private void construirTablaFiltroFecha(Date fecha){
-        String titulos[] = {"ID reservacion", "ID habitacion", "ID huesped",
-                            "fecha de reservación", "dias de reserva", "metodo de pago"};
+        String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
+                "fecha de reservación", "dias de reserva", "metodo de pago"};
         String informacion[][] = obtenerMatrizPorFecha(fecha);
-        tReservaciones = new JTable(informacion, titulos);
-        jspBarraTabla.setViewportView(tReservaciones);
+        this.tReservaciones = new JTable(informacion, titulos);
+        jspBarraTabla.setViewportView(this.tReservaciones);
     }
 
     private void construirTablaTodo(){
-        String titulos[] = {"ID reservacion", "ID habitacion", "ID huesped",
+        String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
                 "fecha de reservación", "dias de reserva", "metodo de pago"};
         String informacion[][] = obtenerMatrizTodos();
-        tReservaciones = new JTable(informacion, titulos);
-        jspBarraTabla.setViewportView(tReservaciones);
+        this.tReservaciones = new JTable(informacion, titulos);
+        jspBarraTabla.setViewportView(this.tReservaciones);
     }
 
     private String[][] obtenerMatrizTodos(){
@@ -70,8 +87,8 @@ public class HistorialReservaciones extends JFrame{
         String matrizInfo[][] = new String[miLista.size()][6];
         for (int i = 0; i < miLista.size(); i++){
             matrizInfo[i][0] = miLista.get(i).getIdReservacion()+"";
-            matrizInfo[i][1] = miLista.get(i).getIdHabitacion()+"";
-            matrizInfo[i][2] = miLista.get(i).getIdHuesped()+"";
+            matrizInfo[i][1] = miLista.get(i).getNumHabitacion()+"";
+            matrizInfo[i][2] = miLista.get(i).getNombreHuesped()+"";
             matrizInfo[i][3] = miLista.get(i).getFechaReserva()+"";
             matrizInfo[i][4] = miLista.get(i).getDiasReserva()+"";
             matrizInfo[i][5] = miLista.get(i).getMetodoPago()+"";
@@ -83,8 +100,8 @@ public class HistorialReservaciones extends JFrame{
         String matrizInfo[][] = new String[miLista.size()][6];
         for (int i = 0; i < miLista.size(); i++){
             matrizInfo[i][0] = miLista.get(i).getIdReservacion()+"";
-            matrizInfo[i][1] = miLista.get(i).getIdHabitacion()+"";
-            matrizInfo[i][2] = miLista.get(i).getIdHuesped()+"";
+            matrizInfo[i][1] = miLista.get(i).getNumHabitacion()+"";
+            matrizInfo[i][2] = miLista.get(i).getNombreHuesped()+"";
             matrizInfo[i][3] = miLista.get(i).getFechaReserva()+"";
             matrizInfo[i][4] = miLista.get(i).getDiasReserva()+"";
             matrizInfo[i][5] = miLista.get(i).getMetodoPago()+"";
