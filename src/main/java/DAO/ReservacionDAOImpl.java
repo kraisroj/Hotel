@@ -73,13 +73,12 @@ public class ReservacionDAOImpl implements ReservacionDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return reservaciones;
     }
 
     @Override
     public void crearReservacion(int idHabitacion, int idHuesped,
-                                    Date fReserva, int dReserva, char metodoPago) {
+                                 Date fReserva, int dReserva, char metodoPago) {
         ResultSet rs;
         try {
             pst = con.prepareStatement("""
@@ -99,21 +98,35 @@ public class ReservacionDAOImpl implements ReservacionDAO {
         }
     }
 
-
-    public int buscar(String nombre) throws SQLException {
+    @Override
+    public List<Reservacion> buscarPorNombre(String nombre) {
+        List<Reservacion> reservaciones = new ArrayList<>();
+        Reservacion reser;
         ResultSet rs;
-       /* con.prepareStatement("""
-                select * from public."RESERVACIONES"
-                inner join public."HUESPEDES" on public."HUESPEDES".nombre = ?
-                where public."RESERVACIONES".id_huesped = public."HUESPEDES".id_huesped;
-                """);*/
-        pst = con.prepareStatement("""
-                select id_huesped from public.\"HUESPEDES\"
-                where public.\"HUESPEDES\".\"nombre\" = ?;
-                """);
-        pst.setString(1, nombre);
-        rs = pst.executeQuery();
-        return rs.getInt("id_huesped");
+        try {
+            pst = con.prepareStatement("""
+                    select id_reservacion, numero_habitacion, nombre, fecha_reservacion, dias_reservacion, metodo_pago 
+                    	from public."RESERVACIONES"
+                    		inner join public."HUESPEDES" on public."HUESPEDES".id_huesped = public."RESERVACIONES".id_huesped
+                    		inner join public."HABITACIONES" on public."HABITACIONES".id_habitacion = public."RESERVACIONES".id_habitacion
+                    		where public."HUESPEDES".nombre = ?;
+                    """);
+            pst.setString(1, nombre);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                reser = new Reservacion();
+                reser.setIdReservacion(rs.getInt("id_reservacion"));
+                reser.setNumHabitacion(rs.getInt("numero_habitacion"));
+                reser.setNombreHuesped(rs.getString("nombre"));
+                reser.setFechaReserva(rs.getDate("fecha_reservacion"));
+                reser.setDiasReserva(rs.getInt("dias_reservacion"));
+                reser.setMetodoPago(rs.getString("metodo_pago"));
+                reservaciones.add(reser);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return reservaciones;
     }
 
     protected void finalize() throws Throwable {

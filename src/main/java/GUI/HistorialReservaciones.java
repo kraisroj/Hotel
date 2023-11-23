@@ -28,6 +28,10 @@ public class HistorialReservaciones extends JFrame{
 
     Calendar cld = Calendar.getInstance();
     JDateChooser dateChos = new JDateChooser(cld.getTime());
+
+    //titulos para JTable
+    String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
+            "fecha de reservación", "dias de reserva", "metodo de pago"};
     public HistorialReservaciones(){
         setContentPane(jpMain);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,14 +43,12 @@ public class HistorialReservaciones extends JFrame{
         dateChos.setDateFormatString("dd/MM/yyyy");
         jpCalen.add(dateChos);
         btnBuscarReservaciones.addActionListener(new ActionListener() {
-            //buscar Reservaciones por fecha
+            //BUSCAR RESERVACIONES POR FECHA
             @Override
             public void actionPerformed(ActionEvent e) {
                 construirTablaFiltroFecha(new java.sql.Date(getDate().getTime()));
             }
         });
-
-
         tReservaciones.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -61,27 +63,47 @@ public class HistorialReservaciones extends JFrame{
                 construirTablaTodo();
             }
         });
+        btnBuscarNombre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                construirTablaFiltroNombre(txtNombreHuesped.getText());
+            }
+        });
     }
     public Date getDate(){
         return dateChos.getDate();
     }
 
     private void construirTablaFiltroFecha(Date fecha){
-        String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
-                "fecha de reservación", "dias de reserva", "metodo de pago"};
         String informacion[][] = obtenerMatrizPorFecha(fecha);
         this.tReservaciones = new JTable(informacion, titulos);
         jspBarraTabla.setViewportView(this.tReservaciones);
     }
 
+    private void construirTablaFiltroNombre(String name){
+        String informacion[][] = obtenerMatrizPorNombre(name);
+        this.tReservaciones = new JTable(informacion, titulos);
+        jspBarraTabla.setViewportView(this.tReservaciones);
+    }
     private void construirTablaTodo(){
-        String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
-                "fecha de reservación", "dias de reserva", "metodo de pago"};
         String informacion[][] = obtenerMatrizTodos();
         this.tReservaciones = new JTable(informacion, titulos);
         jspBarraTabla.setViewportView(this.tReservaciones);
     }
 
+    private String[][] obtenerMatrizPorNombre(String name){
+        List<Reservacion> miLista = reserDAO.buscarPorNombre(name);
+        String matrizInfo[][] = new String[miLista.size()][6];
+        for (int i = 0; i < miLista.size(); i++){
+            matrizInfo[i][0] = miLista.get(i).getIdReservacion()+"";
+            matrizInfo[i][1] = miLista.get(i).getNumHabitacion()+"";
+            matrizInfo[i][2] = miLista.get(i).getNombreHuesped()+"";
+            matrizInfo[i][3] = miLista.get(i).getFechaReserva()+"";
+            matrizInfo[i][4] = miLista.get(i).getDiasReserva()+"";
+            matrizInfo[i][5] = miLista.get(i).getMetodoPago()+"";
+        }
+        return matrizInfo;
+    }
     private String[][] obtenerMatrizTodos(){
         List<Reservacion> miLista = reserDAO.buscarTodoFecha();
         String matrizInfo[][] = new String[miLista.size()][6];

@@ -12,4 +12,5 @@ public interface ReservacionDAO {
                              Date fReserva, int dReserva, char metodoPago);
     List<Reservacion> buscarTodoFecha();
 
+    List<Reservacion> buscarPorNombre(String nombre);
 }

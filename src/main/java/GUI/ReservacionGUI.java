@@ -15,16 +15,17 @@ import java.util.ArrayList;
 
 
 public class ReservacionGUI extends JFrame {
+    //IMPLEMENTACIONES
     private ReservacionDAOImpl reserDAO = new ReservacionDAOImpl();
     private HabitacionDAOImpl habiDao = new HabitacionDAOImpl();
     private HuespedDAOImpl huesDAO = new HuespedDAOImpl();
-
+    //VARIABLES
     private String tam = "";
-
+    private String user = "";
     private Long l = System.currentTimeMillis();
     private Date d = new Date(l);
 
-    ////
+    ////COMPONENTES
     private JPanel jBotonSur;
     private JPanel pnlCenterMain;
     private JPanel pnlNorteInterior;
@@ -64,18 +65,17 @@ public class ReservacionGUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                //obtener valores de tabla
                 int rowIdHabit = tHabitacion.getSelectedRow();
                 int idHabit = Integer.valueOf(tHabitacion.getValueAt(rowIdHabit, 0).toString());
                 int noHabit = Integer.valueOf(tHabitacion.getValueAt(rowIdHabit, 1).toString());
                 char tama = tHabitacion.getValueAt(rowIdHabit, 2).toString().charAt(0);
                 String cocina = tHabitacion.getValueAt(rowIdHabit, 3).toString();
-
-
-                System.out.println(tHabitacion.getValueAt(rowIdHabit, 0).toString());
+                /*System.out.println(tHabitacion.getValueAt(rowIdHabit, 0).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 1).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 2).toString());
                 System.out.println(tHabitacion.getValueAt(rowIdHabit, 3).toString());
-                System.out.println(tHabitacion.getValueAt(rowIdHabit, 4).toString());
+                System.out.println(tHabitacion.getValueAt(rowIdHabit, 4).toString());*/
                 String[] tarjetas = {"Crédito", "Débito"};
 
                 switch (JOptionPane.showOptionDialog(
@@ -83,15 +83,15 @@ public class ReservacionGUI extends JFrame {
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
                         null, tarjetas, 0)
                 )
-                {
+                {//seleccionar que tipo de tarjeta se selecciono
                     case 0:
-                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped("Gerardo Rojas"),
+                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped(user),
                                 new java.sql.Date(d.getTime()), Integer.parseInt(cbDias.getSelectedItem().toString()),
                                 "C".charAt(0));
                             habiDao.ocuparHabitacion(idHabit);
                         break;
                     case 1:
-                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped("Gerardo Rojas"),
+                        reserDAO.crearReservacion(idHabit, huesDAO.obtenerIdHuesped(user),
                                 new java.sql.Date(d.getTime()), Integer.parseInt(cbDias.getSelectedItem().toString())
                                 , "D".charAt(0));
                         habiDao.ocuparHabitacion(idHabit);
@@ -100,14 +100,9 @@ public class ReservacionGUI extends JFrame {
                         break;
                 }
                 construirTablaSinFiltro();
-//              JOptionPane.showMessageDialog(null, "ERROR", "ERROR DE RESERVACION", JOptionPane.INFORMATION_MESSAGE);
-                //habiDao.ocuparHabitacion();
-                //System.out.println(huesDAO.obtenerIdHuesped("Gerardo Rojas"));
-
             }
         });
     }
-
     private String cocinetaOpcion(String opcion) {
         String flag = "";
         if (opcion.equals("Si")) {
@@ -180,11 +175,9 @@ public class ReservacionGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
     }
-
-    public void setTxtUsuario(String user) {
-        this.txtUsuario.setText(user);
+    public void setUser(String user){
+        this.user = user;
     }
-
     public static void main(String[] args) {
         new ReservacionGUI().setVisible(true);
     }

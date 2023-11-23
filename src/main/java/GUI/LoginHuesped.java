@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginHuesped extends JFrame {
+    //DAOS Implementaciones
+
     HuespedDAOImpl huesDAO = new HuespedDAOImpl();
     private JTextField txtLogin;
     private JButton btnLogin;
@@ -21,15 +23,18 @@ public class LoginHuesped extends JFrame {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (huesDAO.buscarNombre(txtLogin.getText())==true) {
+                if (huesDAO.buscarNombre(txtLogin.getText())) {
                     System.out.println("YA CREADO");
                     user = txtLogin.getText();
                     ReservacionGUI reservacionGUI = new ReservacionGUI();
-                    reservacionGUI.setTxtUsuario(user);
-                } else if (huesDAO.save(txtLogin.getText())!=true) {
+                    reservacionGUI.setUser(user);
+                } else if (huesDAO.save(txtLogin.getText()) == 1) {
+                    user = txtLogin.getText();
                     JOptionPane.showMessageDialog(null, """
                             USUARIO CREADO, LA PROXIMA VEZ SE USARA PARA SU LOGEO EN PLATAFORMA
                                """, "", JOptionPane.INFORMATION_MESSAGE);
+                    ReservacionGUI reservacionGUI = new ReservacionGUI();
+                    reservacionGUI.setUser(user);
                     System.out.println("usuario creado");
                 } else {
                     System.out.println("no creado");

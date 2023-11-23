@@ -12,18 +12,17 @@ public class HuespedDAOImpl implements HuespedDAO{
     private Connection con = conn.getConexion();
     private PreparedStatement pst;
     @Override
-    public boolean save(String nombre) {
+    public int save(String nombre) {
         boolean flag = false;
-        ResultSet rs;
+        int rs;
         try {
             pst = con.prepareStatement("""
                     insert into public.\"HUESPEDES\" (nombre)
                     values (?);                
                     """);
             pst.setString(1, nombre);
-            rs = pst.executeQuery();
-            flag = rs.rowInserted();
-            return flag;
+            rs = pst.executeUpdate();
+            return rs;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,7 +30,6 @@ public class HuespedDAOImpl implements HuespedDAO{
 
     @Override
     public boolean buscarNombre(String nombre){
-        boolean flag = false;
         ResultSet rs;
         try {
             pst = con.prepareStatement("""
@@ -40,11 +38,11 @@ public class HuespedDAOImpl implements HuespedDAO{
                     """);
             pst.setString(1, nombre);
             rs = pst.executeQuery();
-            if (rs.next()==true){
-                flag = rs.getString("nombre").equals(nombre);
-                return flag;
+            if (rs.next()){
+                return true;
+            }else{
+                return false;
             }
-            return false;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
