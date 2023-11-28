@@ -119,4 +119,19 @@ public class HabitacionDAOImpl implements HabitacionDAO{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void liberarHabitacion(int numHabitacion) {
+        try {
+            pst = con.prepareStatement("""
+                    UPDATE public."HABITACIONES"
+                        SET estado_ocupado='no'
+                        WHERE public."HABITACIONES".numero_habitacion = ?;
+                    """);
+            pst.setInt(1, numHabitacion);
+            int afectado = pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

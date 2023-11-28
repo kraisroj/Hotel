@@ -13,4 +13,6 @@ public interface HabitacionDAO {
     ArrayList<Habitacion> busquedaSinFiltro();
 
     void ocuparHabitacion(int idHabitacion);
+
+    void liberarHabitacion(int numHabitacion);
 }
