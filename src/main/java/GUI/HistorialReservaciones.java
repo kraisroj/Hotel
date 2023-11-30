@@ -7,10 +7,7 @@ import Entidad.Reservacion;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +28,6 @@ public class HistorialReservaciones extends JFrame {
     private JButton btnBuscarNombre;
     private JTextField txtNombreHuesped;
     private JButton btnTodosFecha;
-
-
-    //titulos para JTable
 
 
     public HistorialReservaciones() {
@@ -97,11 +91,12 @@ public class HistorialReservaciones extends JFrame {
     }
 
     //CONSTRUCCION DE TABLA
-    private String[][] informacionTabla(){
+    private String[][] informacionTabla() {
         String informacion[][] = obtenerMatrizTodos();
         return informacion;
     }
-    private String[] titulosTabla(){
+
+    private String[] titulosTabla() {
         String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
                 "fecha de reservación", "dias de reserva", "metodo de pago"};
         return titulos;

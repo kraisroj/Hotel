@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -40,7 +39,7 @@ public class ReservacionGUI extends JFrame {
     private JScrollPane jspBarraTabla;
     private JButton btnBuscarTodo;
     private JComboBox cbDias;
-    private JButton button1;
+    private JButton btnSalir;
     private JTextField txtCodigoPromocional;
     private JPanel jpCalen;
     private JTextField txtUsuario;
@@ -187,7 +186,6 @@ public class ReservacionGUI extends JFrame {
         this.setTitle("crear reservacion");
         this.setVisible(true);
         this.pack();
-        //this.construirTablaSinFiltro();
         jspBarraTabla.setViewportView(this.tHabitacion);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

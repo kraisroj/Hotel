@@ -18,6 +18,7 @@ public class ReservacionDAOImpl implements ReservacionDAO {
 
     @Override
     public List<Reservacion> buscarTodoFecha() {
+        //METODO QUE IMPRIME TODAS LAS RESERVACIONES DE LA TABLA "RESERVACIONES"
         List<Reservacion> reservaciones = new ArrayList<>();
         Reservacion reser;
         try {
@@ -47,6 +48,7 @@ public class ReservacionDAOImpl implements ReservacionDAO {
 
     @Override
     public List<Reservacion> buscarPorFecha(Date fecha) {
+        //METODO QUE BUSCA LAS RESERVACIONES FILTRANDOLAS POR FECHA
         List<Reservacion> reservaciones = new ArrayList<>();
         Reservacion reser;
         ResultSet rs;
@@ -77,8 +79,8 @@ public class ReservacionDAOImpl implements ReservacionDAO {
     }
 
     @Override
-    public void crearReservacion(int idHabitacion, int idHuesped,
-                                 Date fReserva, int dReserva, char metodoPago) {
+    public void crearReservacion(int idHabitacion, int idHuesped, Date fReserva, int dReserva, char metodoPago) {
+        //METODO QUE INSERTA UNA NUEVA RESERVACION EN LA BASE DE DATOS
         ResultSet rs;
         try {
             pst = con.prepareStatement("""
@@ -127,6 +129,24 @@ public class ReservacionDAOImpl implements ReservacionDAO {
             throw new RuntimeException(e);
         }
         return reservaciones;
+    }
+
+    @Override
+    public void editarReservacion(Date fecha, int dia, int idReser) {
+        //METODO QUE EDITA LA FECHA DE LA RESERVACION
+        try {
+            pst = con.prepareStatement("""
+                    update public."RESERVACIONES"
+                        set fecha_reservacion = ?, dias_reservacion = ?
+                        where public."RESERVACIONES".id_reservacion = ?
+                    """);
+            pst.setDate(1, fecha);
+            pst.setInt(2, dia);
+            pst.setInt(3, idReser);
+            int afectado = pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void finalize() throws Throwable {
