@@ -7,23 +7,65 @@
     <properties/>
     <border type="none" title="Mis Reservaciones"/>
     <children>
-      <grid id="53ebe" binding="jpNorte" layout-manager="BorderLayout" hgap="0" vgap="0">
+      <grid id="53ebe" binding="jpNorte" layout-manager="FormLayout">
+        <rowspec value="center:d:noGrow"/>
+        <rowspec value="top:4dlu:noGrow"/>
+        <rowspec value="center:max(d;4px):noGrow"/>
+        <colspec value="fill:238px:grow"/>
+        <colspec value="left:4dlu:noGrow"/>
+        <colspec value="fill:max(d;4px):noGrow"/>
+        <colspec value="left:4dlu:noGrow"/>
+        <colspec value="fill:212px:grow"/>
         <constraints border-constraint="North"/>
         <properties/>
         <border type="none"/>
         <children>
           <component id="c21f4" class="javax.swing.JLabel">
-            <constraints border-constraint="West"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <forms defaultalign-horz="false"/>
+            </constraints>
             <properties>
+              <horizontalTextPosition value="4"/>
               <text value="Seleccionar fecha a asignar"/>
             </properties>
           </component>
           <grid id="65a2b" binding="jpCalendar" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints border-constraint="Center"/>
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <forms/>
+            </constraints>
             <properties/>
             <border type="none"/>
             <children/>
           </grid>
+          <component id="ed827" class="javax.swing.JComboBox" binding="cbDias">
+            <constraints>
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <forms/>
+            </constraints>
+            <properties>
+              <model>
+                <item value="1"/>
+                <item value="2"/>
+                <item value="3"/>
+                <item value="4"/>
+                <item value="5"/>
+                <item value="6"/>
+                <item value="7"/>
+              </model>
+            </properties>
+          </component>
+          <component id="ec7cf" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <forms defaultalign-horz="false"/>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="4"/>
+              <text value="Dias de estancia"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <grid id="172fd" binding="jpTabla" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

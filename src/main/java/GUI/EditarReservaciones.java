@@ -8,8 +8,8 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class EditarReservaciones extends JFrame {
@@ -17,17 +17,18 @@ public class EditarReservaciones extends JFrame {
     private Calendar cld = Calendar.getInstance();
     private JDateChooser dateChooser = new JDateChooser(cld.getTime());
     private ReservacionDAO reserDAO = new ReservacionDAOImpl();
-
+    private Date sqlDate;
     /*VAIABLES*/
     private String user = "";
 
     //COMPONENTES
-    private JTable jtReservaciones;
+    private JTable jtReservaciones = new JTable(construirTabla(this.user), titulosTabla());;
     private JPanel pnlMain;
     private JPanel jpNorte;
     private JPanel jpTabla;
     private JScrollPane jScrollTabla;
     private JPanel jpCalendar;
+    private JComboBox cbDias;
 
 
     public EditarReservaciones() {
@@ -39,8 +40,23 @@ public class EditarReservaciones extends JFrame {
         jtReservaciones.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
                 super.mouseClicked(e);
+                sqlDate = new java.sql.Date(getDate().getTime());
+                int rowReservacion = jtReservaciones.getSelectedRow();
+                int idReser = Integer.valueOf(jtReservaciones.getValueAt(rowReservacion, 0).toString());
+                System.out.println(idReser);
+                switch (JOptionPane.showOptionDialog(
+                        null, "¿Seguro de actualizar la reservación?",
+                        "Actualizacion de reservacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        null, jOptiones(), 0)){
+                    case 0:
+                        reserDAO.editarReservacion(sqlDate, cbDias.getSelectedIndex(), idReser);
+                        construirTabla(user);
+                        break;
+                    case 1:
+                        break;
+                }
+
             }
         });
     }
@@ -58,14 +74,22 @@ public class EditarReservaciones extends JFrame {
     }
 
     private void inicializarComponentes() {
-        //this.jtReservaciones = new JTable(informaciónTabla(this.getUser()), titulosTabla());
+
         this.setContentPane(pnlMain);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.pack();
+        construirTabla(this.user);
         jScrollTabla.setViewportView(this.jtReservaciones);
-        this.jtReservaciones = new JTable(construirTabla(this.user), titulosTabla());
+
+
+    }
+
+    //OPCIONES DE JOPTIONPANE
+    private String[] jOptiones(){
+        String[] opciones = {"si", "no"};
+        return opciones;
     }
 
     //CONSTRUCCION DE TABLA//

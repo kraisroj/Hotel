@@ -1,11 +1,7 @@
 package DAO;
 
-import Entidad.Habitacion;
 import Entidad.Reservacion;
 import modelo.Conexion;
-
-import javax.xml.transform.Result;
-import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

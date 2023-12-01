@@ -95,7 +95,6 @@ public class HistorialReservaciones extends JFrame {
         String informacion[][] = obtenerMatrizTodos();
         return informacion;
     }
-
     private String[] titulosTabla() {
         String titulos[] = {"ID reservacion", "numero habitacion", "nombre huesped",
                 "fecha de reservación", "dias de reserva", "metodo de pago"};
